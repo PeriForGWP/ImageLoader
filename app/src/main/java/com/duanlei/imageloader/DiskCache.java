@@ -3,9 +3,10 @@ package com.duanlei.imageloader;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 
+import com.duanlei.imageloader.Utils.CloseUtils;
+
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
-import java.io.IOException;
 
 /**
  * Author: duanlei
@@ -24,18 +25,11 @@ public class DiskCache implements ImageCache {
         FileOutputStream fileOutputStream = null;
         try {
             fileOutputStream = new FileOutputStream(cacheDir + url);
-
             bmp.compress(Bitmap.CompressFormat.PNG, 100, fileOutputStream);
         } catch (FileNotFoundException e) {
             e.printStackTrace();
         } finally {
-            if (fileOutputStream != null) {
-                try {
-                    fileOutputStream.close();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            }
+            CloseUtils.closeQuietly(fileOutputStream);
         }
     }
 }
